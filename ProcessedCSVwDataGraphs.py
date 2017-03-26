@@ -8,6 +8,10 @@ Created on Wed Mar 22 16:31:21 2017
 import pandas as pd
 from matplotlib import pyplot as plt
 
+# station AB02
+# Aleutian Island (Nikolski), Alaska. Typically foggy.
+# Seismometer set up at a small hut w a gps looking device outside
+
 # Import data
 sheet_title = 'AB02.pbo.nam08' # the excel file has a tab "Renland d180
 data = pd.read_csv('..\\..\\..\\..\\College\\Superman Spring\\comp methods in geo\\Plate-Boundary-GPS-data\\AB02.pbo.nam08.csv', \
@@ -23,8 +27,9 @@ data = pd.read_csv('..\\..\\..\\..\\College\\Superman Spring\\comp methods in ge
 # Give headers better names
 data.columns = ['date [m/d/y]', 'X Mvmt [mm]', 'Y Mvmt [mm]','Z Mvmt [mm]','' ,'' ,'' ,'' ]
 
+fig = plt.figure(figsize=(6, 12))
 
-plt.figure(figsize=(16, 12)) 
+ax1 = plt.subplot(3, 1, 1)
 plt.plot(data['date [m/d/y]'], data['X Mvmt [mm]'])
 plt.title('PBO GPS X Movement at AB02, Nikolski, AK', fontsize=16, fontweight='bold')
 plt.xlabel('date [m/d/y]', fontsize=16)
@@ -32,7 +37,7 @@ plt.ylabel('X Mvmt [mm]', fontsize=16)
 plt.tight_layout()
 plt.show()
 
-plt.figure(figsize=(16, 12)) 
+ax2 = plt.subplot(3, 1, 2)
 plt.plot(data['date [m/d/y]'], data['Y Mvmt [mm]'])
 plt.title('PBO GPS Y Movement at AB02, Nikolski, AK', fontsize=16, fontweight='bold')
 plt.xlabel('date [m/d/y]', fontsize=16)
@@ -40,7 +45,7 @@ plt.ylabel('Y Mvmt [mm]', fontsize=16)
 plt.tight_layout()
 plt.show()
 
-plt.figure(figsize=(16, 12)) 
+ax3 = plt.subplot(3, 1, 3)
 plt.plot(data['date [m/d/y]'], data['Z Mvmt [mm]'])
 plt.title('PBO GPS Z Movement at AB02, Nikolski, AK', fontsize=16, fontweight='bold')
 plt.xlabel('date [m/d/y]', fontsize=16)
@@ -51,3 +56,11 @@ plt.show()
 #####
 ## ordinary linear regression on data
 #####
+github justmarkham 08_linear_regression
+scipy reference linregress
+scipy numpy linalg.lstsq
+
+# find the residuals (distance from data point to regression line)
+
+# create histogram of data. find mean, sigma, quartiles, std error of mean
+# does the regression line seem like a good fit? (symmetrical error on both sides of line)
