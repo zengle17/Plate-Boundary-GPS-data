@@ -6,6 +6,7 @@ Created on Wed Mar 22 16:31:21 2017
 """
 
 import pandas as pd
+from datetime import datetime
 import statsmodels.formula.api as smf
 from matplotlib import pyplot as plt
 from scipy import stats
@@ -33,49 +34,78 @@ x = data['X Mvmt [mm]']
 y = data['Y Mvmt [mm]']
 z = data['Z Mvmt [mm]']
 
-# lm = smf.ols(formula = 'x ~ t', data = data).fit()
-slope, intercept, r_value, p_value, std_err = stats.linregress(t, x)
-# not working because dates are in a m/d/y set up... need integers
+t1 = np.arange(3322)
+    # need an array vector of number of days not dates for lin reg
+
+slope1, intercept1, r_value1, p_value1, std_err1 = stats.linregress(t1, x)
+print("r-squared:", r_value1**2)
+slope2, intercept2, r_value2, p_value2, std_err2 = stats.linregress(t1, y)
+print("r-squared:", r_value2**2)
+slope3, intercept3, r_value3, p_value3, std_err3 = stats.linregress(t1, z)
+print("r-squared:", r_value3**2)
 
 fig = plt.figure(figsize=(16, 12))
 
 ax1 = plt.subplot(3, 1, 1)
-plt.plot(t, x, label = 'collected data')
-#plt.plot(data['date [m/d/y]'], intercept + slope*data['date [m/d/y]'], 'r', label='fitted line')
+plt.plot(t1, x, label = 'collected data')
+plt.plot(t1, intercept1 + slope1*t1, 'r', label='fitted line')
 plt.legend()
-plt.title('PBO GPS X Movement at AB02, Nikolski, AK', fontsize=16, fontweight='bold')
-plt.xlabel('date [m/d/y]', fontsize=16)
+plt.title('PBO GPS X Movement at AB02, Nikolski, AK Since 5/23/2007', fontsize=16, fontweight='bold')
+plt.xlabel('day', fontsize=16)
 plt.ylabel('X Mvmt [mm]', fontsize=16)
+grid()
 plt.tight_layout()
 plt.show()
 
 ax2 = plt.subplot(3, 1, 2)
-plt.plot(t, y, label = 'collected data')
-#plt.plot(data['date [m/d/y]'], intercept + slope*data['date [m/d/y]'], 'r', label='fitted line')
+plt.plot(t1, y, label = 'collected data')
+plt.plot(t1, intercept2 + slope2*t1, 'r', label='fitted line')
 plt.legend()
-plt.title('PBO GPS Y Movement at AB02, Nikolski, AK', fontsize=16, fontweight='bold')
-plt.xlabel('date [m/d/y]', fontsize=16)
+plt.title('PBO GPS Y Movement at AB02, Nikolski, AK Since 5/23/2007', fontsize=16, fontweight='bold')
+plt.xlabel('day', fontsize=16)
 plt.ylabel('Y Mvmt [mm]', fontsize=16)
+grid()
 plt.tight_layout()
 plt.show()
 
 ax3 = plt.subplot(3, 1, 3)
-plt.plot(t, z, label = 'collected data')
-#plt.plot(data['date [m/d/y]'], intercept + slope*data['date [m/d/y]'], 'r', label='fitted line')
+plt.plot(t1, z, label = 'collected data')
+plt.plot(t1, intercept3 + slope3*t1, 'r', label='fitted line')
 plt.legend()
-plt.title('PBO GPS Z Movement at AB02, Nikolski, AK', fontsize=16, fontweight='bold')
-plt.xlabel('date [m/d/y]', fontsize=16)
+plt.title('PBO GPS Z Movement at AB02, Nikolski, AK Since 5/23/2007', fontsize=16, fontweight='bold')
+plt.xlabel('day', fontsize=16)
 plt.ylabel('Z Mvmt [mm]', fontsize=16)
+grid()
 plt.tight_layout()
 plt.show()
 
-#####
-## ordinary linear regression on data
-#####
-
-
 
 # find the residuals (distance from data point to least squares regression line)
+lm1 = smf.ols(formula='x ~ t1', data=data).fit()
+print lm1.summary()
+lm2 = smf.ols(formula='y ~ t1', data=data).fit()
+print lm2.summary()
+lm3 = smf.ols(formula='z ~ t1', data=data).fit()
+print lm3.summary()
 
+fig1 = plt.figure(figsize=(16, 12))
+
+bx1 = plt.subplot(3, 1, 1)
+difference1 = (intercept1 + slope1*t1) - x
+plot(t1,difference1,'or')
+plt.title('Residuals X Movement', fontsize=16, fontweight='bold')
+grid()
+
+bx2 = plt.subplot(3, 1, 2)
+difference2 = (intercept2 + slope2*t1) - y
+plot(t1,difference2,'or')
+plt.title('Residuals Y Movement', fontsize=16, fontweight='bold')
+grid()
+
+bx3 = plt.subplot(3, 1, 3)
+difference3 = (intercept3 + slope3*t1) - z
+plot(t1,difference3,'or')
+plt.title('Residuals Z Movement', fontsize=16, fontweight='bold')
+grid()
 # create histogram of data. find mean, sigma, quartiles, std error of mean
 # does the regression line seem like a good fit? (symmetrical error on both sides of line)
