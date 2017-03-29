@@ -5,6 +5,7 @@ Created on Wed Mar 22 16:31:21 2017
 @author: Zach
 """
 
+import numpy as np
 import pandas as pd
 from datetime import date
 import statsmodels.formula.api as smf
@@ -44,6 +45,13 @@ print delta.days
 t1 = np.arange(3322)
     # need an array vector of number of days not dates for lin reg
 
+
+# This also create a new column of days since the start for regression
+#pbo_data['date_delta'] = (pbo_data['Date'] - pbo_data['Date'].min()) / np.timedelta64(1,'D')
+                         # this subtracts date by min date and divides by 1 day
+#d = pbo_data['date_delta']
+#d = sm.add_constant(X)
+
 # find least squares regression line
 slope1, intercept1, r_value1, p_value1, std_err1 = stats.linregress(t1, x)
 print("r-squared:", r_value1**2)
@@ -62,7 +70,7 @@ plt.legend()
 plt.title('PBO GPS X Movement at AB02, Nikolski, AK Since 5/23/2007', fontsize=16, fontweight='bold')
 plt.xlabel('day', fontsize=16)
 plt.ylabel('X Mvmt [mm]', fontsize=16)
-grid()
+plt.grid()
 plt.tight_layout()
 plt.show()
 
@@ -73,7 +81,7 @@ plt.legend()
 plt.title('PBO GPS Y Movement at AB02, Nikolski, AK Since 5/23/2007', fontsize=16, fontweight='bold')
 plt.xlabel('day', fontsize=16)
 plt.ylabel('Y Mvmt [mm]', fontsize=16)
-grid()
+plt.grid()
 plt.tight_layout()
 plt.show()
 
@@ -84,7 +92,7 @@ plt.legend()
 plt.title('PBO GPS Z Movement at AB02, Nikolski, AK Since 5/23/2007', fontsize=16, fontweight='bold')
 plt.xlabel('day', fontsize=16)
 plt.ylabel('Z Mvmt [mm]', fontsize=16)
-grid()
+plt.grid()
 plt.tight_layout()
 plt.show()
 
@@ -103,20 +111,23 @@ fig1 = plt.figure(figsize=(16, 12))
 
 bx1 = plt.subplot(3, 1, 1)
 difference1 = (intercept1 + slope1*t1) - x
-plot(t1,difference1,'or')
+plt.plot(t1,difference1,'or')
+plt.plot(t1, 0*difference1)
 plt.title('Residuals X Movement', fontsize=16, fontweight='bold')
-grid()
+plt.grid()
 
 bx2 = plt.subplot(3, 1, 2)
 difference2 = (intercept2 + slope2*t1) - y
-plot(t1,difference2,'or')
+plt.plot(t1,difference2,'or')
+plt.plot(t1, 0*difference1)
 plt.title('Residuals Y Movement', fontsize=16, fontweight='bold')
-grid()
+plt.grid()
 
 bx3 = plt.subplot(3, 1, 3)
 difference3 = (intercept3 + slope3*t1) - z
-plot(t1,difference3,'or')
+plt.plot(t1,difference3,'or')
+plt.plot(t1, 0*difference1)
 plt.title('Residuals Z Movement', fontsize=16, fontweight='bold')
-grid()
+plt.grid()
 # create histogram of data. find mean, sigma, quartiles, std error of mean
 # does the regression line seem like a good fit? (symmetrical error on both sides of line)
