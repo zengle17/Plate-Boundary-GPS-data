@@ -6,7 +6,7 @@ Created on Wed Mar 22 16:31:21 2017
 """
 
 import pandas as pd
-from datetime import datetime
+from datetime import date
 import statsmodels.formula.api as smf
 from matplotlib import pyplot as plt
 from scipy import stats
@@ -34,9 +34,17 @@ x = data['X Mvmt [mm]']
 y = data['Y Mvmt [mm]']
 z = data['Z Mvmt [mm]']
 
+d0 = date(2007, 5, 23)
+d1 = date(2017, 3, 20)
+delta = d0 - d1
+print delta.days
+    # there are skipped days between the last and first day in the data
+    # 3322 days recorded movement but several months in 2008 and 2009 experienced no data
+    # between the two dates is 3589 days
 t1 = np.arange(3322)
     # need an array vector of number of days not dates for lin reg
 
+# find least squares regression line
 slope1, intercept1, r_value1, p_value1, std_err1 = stats.linregress(t1, x)
 print("r-squared:", r_value1**2)
 slope2, intercept2, r_value2, p_value2, std_err2 = stats.linregress(t1, y)
@@ -44,6 +52,7 @@ print("r-squared:", r_value2**2)
 slope3, intercept3, r_value3, p_value3, std_err3 = stats.linregress(t1, z)
 print("r-squared:", r_value3**2)
 
+# plot data and regression line
 fig = plt.figure(figsize=(16, 12))
 
 ax1 = plt.subplot(3, 1, 1)
@@ -81,6 +90,7 @@ plt.show()
 
 
 # find the residuals (distance from data point to least squares regression line)
+# this gives a summary of regression statsistics
 lm1 = smf.ols(formula='x ~ t1', data=data).fit()
 print lm1.summary()
 lm2 = smf.ols(formula='y ~ t1', data=data).fit()
@@ -88,6 +98,7 @@ print lm2.summary()
 lm3 = smf.ols(formula='z ~ t1', data=data).fit()
 print lm3.summary()
 
+# plot residuals
 fig1 = plt.figure(figsize=(16, 12))
 
 bx1 = plt.subplot(3, 1, 1)
